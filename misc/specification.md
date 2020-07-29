@@ -2,6 +2,7 @@
 The goal for this project is to make my phone notify me when my plants need water.
 
 My plan to make this happen:
+
 - Arduino with moisture sensor and wifi
 - REST api that receives measures from the arduino and triggers notifications on my phone
 - Android app that receives notifications
@@ -32,6 +33,6 @@ My plan to make this happen:
 
 ### Technologies
 - Arduino
-- REST api in Rust (node if I spend to much time)
+- REST api in Rust (node if I spend too much time)
 - Web app in React
-- Native Android app (flutter if I spend to much time)
+- Native Android app (flutter if I spend too much time)
