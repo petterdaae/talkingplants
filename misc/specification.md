@@ -33,6 +33,6 @@ My plan to make this happen:
 
 ### Technologies
 - Arduino
-- REST api in Rust (node if I spend too much time)
+- REST api in ~~Rust (node if I spend too much time)~~ Go
 - Web app in React
-- Native Android app (flutter if I spend too much time)
+- ~~Native Android app (flutter if I spend too much time)~~ Flutter
