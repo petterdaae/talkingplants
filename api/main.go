@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"log"
@@ -29,10 +30,14 @@ func main() {
 		return
 	}
 
+	router := mux.NewRouter().StrictSlash(true)
+	router.HandleFunc("/plants", CreatePlant).Methods("POST")
+	router.HandleFunc("/plants/{id}", GetPlant).Methods("GET")
+	router.HandleFunc("/plants", GetPlants).Methods("GET")
+	router.HandleFunc("/plants/{id}", DeletePlant).Methods("DELETE")
+	router.HandleFunc("/plants/{id}", UpdatePlant).Methods("PUT")
+
 	port := os.Getenv("PORT")
-
 	log.Println("Listening for REST calls on port " + port)
-
-	http.HandleFunc("/", welcome)
-	log.Fatal(http.ListenAndServe(":" + port, nil))
+	log.Fatal(http.ListenAndServe(":" + port, router))
 }
