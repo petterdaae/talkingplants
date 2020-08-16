@@ -1,55 +1,37 @@
 import React from 'react';
-import { Line } from '@nivo/line'
-
-const commonProperties = {
-  width: 1500,
-  height: 1000,
-  margin: { top: 20, right: 20, bottom: 60, left: 80 },
-  animate: true,
-  enableSlices: 'x',
-}
+import LineChart from './components/LineChart';
+import './App.css';
 
 function App() {
+  const data =
+    [
+      {
+        id: 'Moisture',
+        data: [
+          { x: '2018-01-01', y: 734 },
+          { x: '2018-01-02', y: 710 },
+          { x: '2018-01-03', y: 682 },
+          { x: '2018-01-04', y: 620 },
+          { x: '2018-01-05', y: 590 },
+          { x: '2018-01-06', y: 734 },
+          { x: '2018-01-07', y: 705 },
+          { x: '2018-01-08', y: 690 },
+          { x: '2018-01-09', y: 690 },
+          { x: '2018-01-10', y: 600 },
+          { x: '2018-01-11', y: 690 },
+          { x: '2018-01-12', y: 690 },
+          { x: '2018-01-13', y: 700 },
+          { x: '2018-01-14', y: 690 },
+        ],
+      }
+    ];
+
+  const width = window.innerWidth > 1800 ? window.innerWidth / 1.7 : window.innerWidth / 1.2;
   return (
-    <Line
-      {...commonProperties}
-      data={[
-        {
-          id: 'Moisture',
-          data: [
-            { x: '2018-01-01', y: 734 },
-            { x: '2018-01-02', y: 710 },
-            { x: '2018-01-03', y: 682 },
-            { x: '2018-01-04', y: 620 },
-            { x: '2018-01-05', y: 590 },
-            { x: '2018-01-06', y: 734 },
-            { x: '2018-01-07', y: 705 },
-            { x: '2018-01-08', y: 690 },
-          ],
-        },
-      ]}
-      xScale={{
-        type: 'time',
-        format: '%Y-%m-%d',
-        useUTC: false,
-        precision: 'day',
-      }}
-      xFormat="time:%Y-%m-%d"
-      yScale={{
-        type: 'linear',
-        stacked: true,
-        min: 'auto'
-      }}
-      axisBottom={{
-        format: '%b %d',
-        tickValues: 'every 2 days',
-      }}
-      pointSize={16}
-      pointBorderColor={{
-        from: 'color',
-        modifiers: [['darker', 0.3]],
-      }}
-    />
+    <div className="wrapper">
+      <h1 className="header">Begonia Maculata</h1>
+      <LineChart data={data} width={width} height={400} />
+    </div>
   );
 }
 
