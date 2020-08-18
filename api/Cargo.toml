@@ -13,3 +13,9 @@ tokio = { version = "0.2", features = ["macros"] }
 log = "0.4.11"
 pretty_env_logger = "0.4.0"
 dotenv = "0.15.0"
+http = "0.2.1"
+tokio-postgres = { version = "0.5.5", features = [ ] }
+postgres-openssl = "0.3.0"
+# openssl = "0.10.30"
+postgres-native-tls = "0.3.0"
+openssl = "0.10"
