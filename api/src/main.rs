@@ -1,6 +1,6 @@
 extern crate dotenv;
 
-use http;
+use http::StatusCode;
 use log::{error, info};
 use openssl::ssl::{SslConnector, SslMethod};
 use postgres_openssl::MakeTlsConnector;
@@ -8,11 +8,17 @@ use pretty_env_logger;
 use serde::{Deserialize, Serialize};
 use std::env;
 use tokio_postgres::Client;
+use warp::reply::{json, with_status};
 use warp::Filter;
 
 #[derive(Serialize, Deserialize)]
 struct Plant {
     name: String,
+}
+
+#[derive(Serialize, Deserialize)]
+struct JsonResponse {
+    message: String,
 }
 
 async fn db_connect() -> Client {
@@ -31,17 +37,17 @@ async fn db_connect() -> Client {
     client
 }
 
-async fn new_plant() -> Result<impl warp::Reply, warp::Rejection> {
+async fn new_plant(plant: Plant) -> Result<impl warp::Reply, warp::Rejection> {
     let client = db_connect().await;
     client
-        .query("INSERT INTO plant (name) VALUES ($1)", &[&"Petter 3"])
+        .query("INSERT INTO plant (name) VALUES ($1)", &[&plant.name])
         .await
         .unwrap();
 
-    Ok(warp::reply::with_status(
-        format!("Hello, World!"),
-        http::StatusCode::CREATED,
-    ))
+    let response = JsonResponse {
+        message: String::from("successfully inserted new plant into database"),
+    };
+    Ok(with_status(json(&response), StatusCode::CREATED))
 }
 
 #[tokio::main]
@@ -54,7 +60,10 @@ async fn main() {
 
     info!("Talking Plants REST API Started");
 
-    let np = warp::post().and(warp::path("plants")).and_then(new_plant);
+    let np = warp::post()
+        .and(warp::path("plants"))
+        .and(warp::body::json())
+        .and_then(new_plant);
 
     warp::serve(np).run(([127, 0, 0, 1], 3030)).await;
 }
