@@ -17,6 +17,14 @@ struct Plant {
 }
 
 #[derive(Serialize, Deserialize)]
+struct SensorData {
+    data: i32,
+    #[serde(rename = "type")]
+    type_name: String,
+    plant: i32,
+}
+
+#[derive(Serialize, Deserialize)]
 struct JsonResponse {
     message: String,
 }
@@ -58,6 +66,37 @@ async fn new_plant(plant: Plant, auth_header: String) -> Result<impl warp::Reply
     Ok(with_status(json(&response), StatusCode::CREATED))
 }
 
+async fn new_data(
+    sensor_data: SensorData,
+    auth_header: String,
+) -> Result<impl warp::Reply, warp::Rejection> {
+    let correct_key = env::var("API_KEY").unwrap();
+    if correct_key != auth_header {
+        let response = JsonResponse {
+            message: String::from("Authentication failed"),
+        };
+        return Ok(with_status(json(&response), StatusCode::UNAUTHORIZED));
+    }
+
+    let client = db_connect().await;
+    client
+        .query(
+            "INSERT INTO sensordata (data, type, plant) VALUES ($1, $2, $3)",
+            &[
+                &sensor_data.data,
+                &sensor_data.type_name,
+                &sensor_data.plant,
+            ],
+        )
+        .await
+        .unwrap();
+
+    let response = JsonResponse {
+        message: String::from("sucessfully inserted new sensor data into database"),
+    };
+    Ok(with_status(json(&response), StatusCode::CREATED))
+}
+
 #[tokio::main]
 async fn main() {
     // Load config into environment from .evn files
@@ -66,11 +105,19 @@ async fn main() {
     // Initialize logging
     pretty_env_logger::init();
 
-    let np = warp::post()
+    let new_plant_route = warp::post()
         .and(warp::path("plants"))
         .and(warp::body::json())
         .and(warp::header("Authorization"))
         .and_then(new_plant);
 
-    warp::serve(np).run(([127, 0, 0, 1], 3030)).await;
+    let new_data_route = warp::post()
+        .and(warp::path("data"))
+        .and(warp::body::json())
+        .and(warp::header("Authorization"))
+        .and_then(new_data);
+
+    warp::serve(new_plant_route.or(new_data_route))
+        .run(([127, 0, 0, 1], 3030))
+        .await;
 }
