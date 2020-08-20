@@ -107,7 +107,7 @@ async fn main() {
     pretty_env_logger::init();
 
     let port = env::var("PORT").unwrap();
-    let host = format!("127.0.0.1:{}", port);
+    let host = format!("0.0.0.0:{}", port);
     let socket_addr: SocketAddr = host.parse().unwrap();
 
     let new_plant_route = warp::post()
