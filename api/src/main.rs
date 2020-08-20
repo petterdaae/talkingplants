@@ -7,6 +7,7 @@ use postgres_openssl::MakeTlsConnector;
 use pretty_env_logger;
 use serde::{Deserialize, Serialize};
 use std::env;
+use std::net::SocketAddr;
 use tokio_postgres::Client;
 use warp::reply::{json, with_status};
 use warp::Filter;
@@ -105,6 +106,9 @@ async fn main() {
     // Initialize logging
     pretty_env_logger::init();
 
+    // Fetch socket address to host api from
+    let socket_addr: SocketAddr = env::var("SOCKET_ADDR").unwrap().parse().unwrap();
+
     let new_plant_route = warp::post()
         .and(warp::path("plants"))
         .and(warp::body::json())
@@ -117,7 +121,9 @@ async fn main() {
         .and(warp::header("Authorization"))
         .and_then(new_data);
 
-    warp::serve(new_plant_route.or(new_data_route))
-        .run(([127, 0, 0, 1], 3030))
+    let health = warp::get().and(warp::path("health")).map(|| "Healthy");
+
+    warp::serve(new_plant_route.or(new_data_route).or(health))
+        .run(socket_addr)
         .await;
 }
