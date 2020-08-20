@@ -1,7 +1,7 @@
 extern crate dotenv;
 
 use http::StatusCode;
-use log::{error, info};
+use log::error;
 use openssl::ssl::{SslConnector, SslMethod};
 use postgres_openssl::MakeTlsConnector;
 use pretty_env_logger;
@@ -37,7 +37,15 @@ async fn db_connect() -> Client {
     client
 }
 
-async fn new_plant(plant: Plant) -> Result<impl warp::Reply, warp::Rejection> {
+async fn new_plant(plant: Plant, auth_header: String) -> Result<impl warp::Reply, warp::Rejection> {
+    let correct_key = env::var("API_KEY").unwrap();
+    if correct_key != auth_header {
+        let response = JsonResponse {
+            message: String::from("Authentication failed"),
+        };
+        return Ok(with_status(json(&response), StatusCode::UNAUTHORIZED));
+    }
+
     let client = db_connect().await;
     client
         .query("INSERT INTO plant (name) VALUES ($1)", &[&plant.name])
@@ -58,11 +66,10 @@ async fn main() {
     // Initialize logging
     pretty_env_logger::init();
 
-    info!("Talking Plants REST API Started");
-
     let np = warp::post()
         .and(warp::path("plants"))
         .and(warp::body::json())
+        .and(warp::header("Authorization"))
         .and_then(new_plant);
 
     warp::serve(np).run(([127, 0, 0, 1], 3030)).await;
