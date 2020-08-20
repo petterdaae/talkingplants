@@ -31,7 +31,7 @@ struct JsonResponse {
 }
 
 async fn db_connect() -> Client {
-    let credentials = env::var("DB_CONNECTION_STRING").unwrap();
+    let credentials = env::var("DATABASE_URL").unwrap();
     let mut builder = SslConnector::builder(SslMethod::tls()).unwrap();
     builder.set_verify(openssl::ssl::SslVerifyMode::NONE);
     let negotiator = MakeTlsConnector::new(builder.build());
