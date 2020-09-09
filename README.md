@@ -7,10 +7,13 @@
 * `git push heroku master`
 
 ## 🚀 Arduino deployment
-* Create a file called `arduino_secrets.h` file. The content should look something like this:
+* Create a file called `config.h` file. The content should look something like this:
 ```c++
 #define WIFI_SSID "wifiname"
 #define WIFI_PASS "wifipassword"
+#define API_KEY "apikey"
+#define PLANT_ID "42"
+#define API_HOST "example.com"
 ```
 * Put the file in `arduino/arduino_mkr_1010/`.
 * Install/download the necessary dependencies (look at the top of the sketch file).
