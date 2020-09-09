@@ -4,6 +4,7 @@ use log::error;
 use pretty_env_logger;
 use std::env;
 use std::net::SocketAddr;
+use warp::http::header::{HeaderMap, HeaderValue};
 use warp::Filter;
 
 mod common;
@@ -30,7 +31,16 @@ async fn main() {
         return;
     }
 
+    // Verify that clients have the correct api key
     let authentication = warp::header::exact("Authorization", api_key);
+
+    // Set response headers
+    let mut response_headers = HeaderMap::new();
+    let allow_origin = Box::leak(env::var("ALLOW_ORIGIN").unwrap().into_boxed_str());
+    response_headers.insert(
+        "Access-Control-Allow-Origin",
+        HeaderValue::from_static(allow_origin),
+    );
 
     // Setup authorized routes
     let new_plant = warp::post()
@@ -47,8 +57,14 @@ async fn main() {
     let list_plants = warp::get()
         .and(warp::path("plants"))
         .and_then(plants::list_plants);
+    let list_data = warp::get()
+        .and(warp::path("data"))
+        .and_then(sensordata::list_data);
     let health = warp::get().and(warp::path("health")).map(|| "Healthy");
-    let unauthorized = health.or(list_plants);
+    let unauthorized = health
+        .or(list_plants)
+        .or(list_data)
+        .with(warp::reply::with::headers(response_headers));
 
     //// Serve routes
     warp::serve(authorized.or(unauthorized))

@@ -10,7 +10,7 @@ pub struct Plant {
     name: String,
 }
 
-impl std::convert::From<&Row> for Plant {
+impl From<&Row> for Plant {
     fn from(row: &Row) -> Self {
         Self {
             id: row.get("id"),
