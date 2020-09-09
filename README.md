@@ -16,5 +16,7 @@
 * Install/download the necessary dependencies (look at the top of the sketch file).
 * Open the `arduino/arduino_mkr_1010` folder/sketch in the arduino IDE and uplaod it to your arduino (preferably *Arduino MKR WiFi 1010*).
 
-## ❌ Arduino troubleshooting
+## 😠 Arduino troubleshooting
 * Use `lsusb` to check if the arduino is actually connected to usb.
+* Press the reset button on the arduino to restart the sketch.
+* Doubletap the reset button if you are not able to upload new code.
