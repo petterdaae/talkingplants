@@ -4,8 +4,7 @@ use log::error;
 use pretty_env_logger;
 use std::env;
 use std::net::SocketAddr;
-use warp::filter::map::Map;
-use warp::{filters, reject, Filter, Rejection};
+use warp::Filter;
 
 mod common;
 mod plants;
@@ -25,11 +24,13 @@ async fn main() {
     let socket_addr: SocketAddr = host.parse().unwrap();
 
     // Validate api key
-    let api_key = env::var("API_KEY").unwrap();
+    let api_key = Box::leak(env::var("API_KEY").unwrap().into_boxed_str());
     if api_key.len() < 20 {
         error!("Invalid API_KEY. The API_KEY should be longer than 20 characters. Check your environment.");
         return;
     }
+
+    let authentication = warp::header::exact("Authorization", api_key);
 
     // Setup authorized routes
     let new_plant = warp::post()
@@ -40,25 +41,14 @@ async fn main() {
         .and(warp::path("data"))
         .and(warp::body::json())
         .and_then(sensordata::new_data);
-    let authorized = with_env_auth(api_key).and(new_plant.or(new_data));
+    let authorized = authentication.and(new_plant.or(new_data));
 
     // Setup unauthorized routes
     let health = warp::get().and(warp::path("health")).map(|| "Healthy");
     let unauthorized = health;
 
-    // Serve routes
+    //// Serve routes
     warp::serve(authorized.or(unauthorized))
         .run(socket_addr)
         .await;
-}
-
-fn with_env_auth(api_key: String) -> impl Filter<Extract = (), Error = Rejection> + Copy {
-    warp::header("Authorization").map(move |authorization| -> Result<(), Rejection> {
-        if authorization == api_key {
-            Ok(())
-        } else {
-            Err(reject::reject())
-        }
-    })
-    // .map_err(|| reject::reject())
 }
