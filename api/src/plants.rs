@@ -1,10 +1,22 @@
 use crate::common;
 use http::StatusCode;
 use serde::{Deserialize, Serialize};
+use tokio_postgres::row::Row;
+use warp::reply::{json, with_status};
 
 #[derive(Serialize, Deserialize)]
 pub struct Plant {
+    id: Option<i32>,
     name: String,
+}
+
+impl std::convert::From<&Row> for Plant {
+    fn from(row: &Row) -> Self {
+        Self {
+            id: row.get("id"),
+            name: row.get("name"),
+        }
+    }
 }
 
 pub async fn new_plant(plant: Plant) -> Result<impl warp::Reply, warp::Rejection> {
@@ -14,4 +26,16 @@ pub async fn new_plant(plant: Plant) -> Result<impl warp::Reply, warp::Rejection
         .await
         .unwrap();
     Ok(common::ok("new plant created", StatusCode::CREATED))
+}
+
+pub async fn list_plants() -> Result<impl warp::Reply, warp::Rejection> {
+    let client = common::db_connect().await;
+    let rows: Vec<Plant> = client
+        .query("SELECT id, name FROM plant", &[])
+        .await
+        .unwrap()
+        .iter()
+        .map(|row| Plant::from(row))
+        .collect();
+    Ok(with_status(json(&rows), StatusCode::OK))
 }

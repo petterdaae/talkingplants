@@ -44,8 +44,11 @@ async fn main() {
     let authorized = authentication.and(new_plant.or(new_data));
 
     // Setup unauthorized routes
+    let list_plants = warp::get()
+        .and(warp::path("plants"))
+        .and_then(plants::list_plants);
     let health = warp::get().and(warp::path("health")).map(|| "Healthy");
-    let unauthorized = health;
+    let unauthorized = health.or(list_plants);
 
     //// Serve routes
     warp::serve(authorized.or(unauthorized))
