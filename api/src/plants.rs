@@ -13,5 +13,5 @@ pub async fn new_plant(plant: Plant) -> Result<impl warp::Reply, warp::Rejection
         .query("INSERT INTO plant (name) VALUES ($1)", &[&plant.name])
         .await
         .unwrap();
-    Ok(common::ok("Hey", StatusCode::CREATED))
+    Ok(common::ok("new plant created", StatusCode::CREATED))
 }

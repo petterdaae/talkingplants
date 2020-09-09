@@ -3,7 +3,6 @@ use serde::{Deserialize, Serialize};
 use warp;
 
 use crate::common;
-use warp::reply::{json, with_status};
 
 #[derive(Serialize, Deserialize)]
 struct JsonResponse {
@@ -31,9 +30,5 @@ pub async fn new_data(sensor_data: SensorData) -> Result<impl warp::Reply, warp:
         )
         .await
         .unwrap();
-
-    let response = JsonResponse {
-        message: String::from("sucessfully inserted new sensor data into database"),
-    };
-    Ok(with_status(json(&response), StatusCode::CREATED))
+    Ok(common::ok("sensordata registered", StatusCode::CREATED))
 }
