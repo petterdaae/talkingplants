@@ -1,0 +1,5 @@
+.image {
+    display: inline-block;
+    border-radius: 50%;
+    padding: 8px;
+}

@@ -1,3 +1,10 @@
 .header {
     text-align: center;
 }
+
+.menu-wrapper {
+    padding-top: 100px;
+    text-align: center;
+    margin-left: 500px;
+    margin-right: 500px;
+}

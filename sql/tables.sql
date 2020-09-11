@@ -3,6 +3,8 @@ create table plant (
     name varchar(255) not null
 );
 
+alter table plant add column image bytea;
+
 create table sensordata (
     id serial primary key,
     data int not null,
