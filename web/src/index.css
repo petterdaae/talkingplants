@@ -2,6 +2,7 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #222831;
-  font-family: "Nunito",sans-serif;
+  background-color: #F5F5DC;
+  font-family: "Courier New";
+  color: #696969;
 }
