@@ -1,7 +1,7 @@
 # 🌱 Talking Plants
 
 ## 🚀 REST api deployment
-[![Heroku](https://heroku-badge.herokuapp.com/?app=inf319&root=health)]
+![Heroku](https://heroku-badge.herokuapp.com/?app=inf319&root=health)
 
 * https://elements.heroku.com/buildpacks/sectorlabs/heroku-buildpack-subdir
 * https://github.com/emk/heroku-buildpack-rust
