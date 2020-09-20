@@ -1,5 +1,5 @@
 # 🌱 Talking Plants
-Notifies you when your plants need your attention.
+Notifies you when your plants need your attention. You can check out the unauthenticated parts of the application at [](talkingplants.daae.dev)
 
 ## 🚀 Deploy
 ### Rest API
