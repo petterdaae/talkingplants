@@ -1,8 +1,15 @@
 import React from "react";
-import "./index.css"
+import styled from '@emotion/styled'
+
+const StyledImage = styled.img`
+    display: inline-block;
+    border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+`;
 
 function RoundedImage({ size, name }) {
-    return <img src={name} alt="plant" className="image" height={size} width={size}></img>
+    return <StyledImage src={name} alt="plant" height={size} width={size}></StyledImage>
 }
 
 export default RoundedImage;
