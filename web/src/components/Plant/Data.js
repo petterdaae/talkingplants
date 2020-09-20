@@ -18,16 +18,20 @@ const StyledTh = styled.th`
 function Data({ data }) {
     return (
         <StyledTable>
-            <tr>
-                <StyledTh>Timestamp</StyledTh>
-                <StyledTh>Data</StyledTh>
-            </tr>
-            {data.map(entry =>
+            <thead>
                 <tr>
-                    <StyledTd>2020-08-12 12:34:45</StyledTd>
-                    <StyledTd>932</StyledTd>
-                </tr>)
-            }
+                    <StyledTh>Timestamp</StyledTh>
+                    <StyledTh>Data</StyledTh>
+                </tr>
+            </thead>
+            <tbody>
+                {data.map(entry =>
+                    <tr key={entry.timestamp}>
+                        <StyledTd>{entry.timestamp}</StyledTd>
+                        <StyledTd>{entry.data}</StyledTd>
+                    </tr>)
+                }
+            </tbody>
         </StyledTable>
     );
 }
