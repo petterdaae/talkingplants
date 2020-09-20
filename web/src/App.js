@@ -13,6 +13,10 @@ const NotFound = styled.div`
   padding: 200px;
 `;
 
+const Center = styled.div`
+  text-align: center;
+`;
+
 function App() {
   return (<Router>
     <Switch>
@@ -20,7 +24,9 @@ function App() {
         <Home></Home>
       </Route>
       <Route exact path="/plant">
-        <Plant id={10}></Plant>
+        <Center>
+          <Plant id={10}></Plant>
+        </Center>
       </Route>
       <Route path="/">
         <NotFound>Not found</NotFound>

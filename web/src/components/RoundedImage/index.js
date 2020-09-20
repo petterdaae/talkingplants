@@ -2,7 +2,6 @@ import React from "react";
 import styled from '@emotion/styled'
 
 const StyledImage = styled.img`
-    display: inline-block;
     border-radius: 50%;
     padding: 8px;
     cursor: pointer;

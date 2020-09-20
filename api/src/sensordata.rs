@@ -68,7 +68,7 @@ pub async fn list_data(
     let client = common::db_connect().await;
     let rows: Vec<SensorDataOut> = client
         .query(
-            "select data, coalesce(to_char(timestamp, 'YYYY-MM-DD HH24:MI:SS'), '') as timestamp, type from sensordata where plant = $1 order by timestamp desc limit 20",
+            "select data, coalesce(to_char(timestamp, 'YYYY-MM-DD HH24:MI:SS'), '') as timestamp, type from sensordata where plant = $1 order by timestamp desc limit 50",
             &[&plant],
         )
         .await

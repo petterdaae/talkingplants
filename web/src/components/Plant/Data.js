@@ -7,12 +7,16 @@ const StyledTable = styled.table`
 
 const StyledTd = styled.td`
     border: 1px solid #a1a1a1;
-    padding: 0.5rem;
+    padding: 8px;
+    padding-left: 64px;
+    padding-right: 64px;
 `;
 
 const StyledTh = styled.th`
     text-align: left;
-    padding: 0.5rem;
+    padding: 8px;
+    padding-left: 64px;
+    padding-right: 64px;
 `;
 
 function Data({ data }) {

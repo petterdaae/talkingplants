@@ -11,6 +11,10 @@ const MenuWrapper = styled.div`
     text-align: center;
     margin-left: 500px;
     margin-right: 500px;
+    @media (max-width: 900px) {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
 `;
 
 function Home() {
