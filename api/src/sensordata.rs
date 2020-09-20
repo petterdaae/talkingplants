@@ -1,6 +1,7 @@
 use crate::common;
 use http::StatusCode;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use tokio_postgres::row::Row;
 use warp;
 use warp::reply::{json, with_status};
@@ -11,7 +12,7 @@ struct JsonResponse {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct SensorData {
+pub struct SensorDataIn {
     data: i32,
     #[serde(rename = "type")]
     type_name: String,
@@ -19,21 +20,24 @@ pub struct SensorData {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct AvgEntry {
+pub struct SensorDataOut {
     data: i32,
-    date: String,
+    timestamp: String,
+    #[serde(rename = "type")]
+    type_name: String,
 }
 
-impl From<&Row> for AvgEntry {
+impl From<&Row> for SensorDataOut {
     fn from(row: &Row) -> Self {
         Self {
             data: row.get("data"),
-            date: row.get("date"),
+            timestamp: row.get("timestamp"),
+            type_name: row.get("type"),
         }
     }
 }
 
-pub async fn new_data(sensor_data: SensorData) -> Result<impl warp::Reply, warp::Rejection> {
+pub async fn new_data(sensor_data: SensorDataIn) -> Result<impl warp::Reply, warp::Rejection> {
     let client = common::db_connect().await;
     client
         .query(
@@ -49,14 +53,28 @@ pub async fn new_data(sensor_data: SensorData) -> Result<impl warp::Reply, warp:
     Ok(common::ok("sensordata registered", StatusCode::CREATED))
 }
 
-pub async fn list_data() -> Result<impl warp::Reply, warp::Rejection> {
+pub async fn list_data(
+    params: HashMap<String, String>,
+) -> Result<impl warp::Reply, warp::Rejection> {
+    if !params.contains_key("plant") {
+        return Ok(common::bad_request("missing query parameter: plant"));
+    }
+    let plant = params.get("plant").unwrap();
+    let plant = plant.parse::<i32>();
+    if !plant.is_ok() {
+        return Ok(common::bad_request("invalid query parameter: plant"));
+    }
+    let plant = plant.unwrap();
     let client = common::db_connect().await;
-    let rows: Vec<AvgEntry> = client
-        .query("select cast(date(timestamp) as varchar(255)), cast(avg(data) as int) as data from sensordata group by date(timestamp) order by date(timestamp) asc limit 10", &[])
+    let rows: Vec<SensorDataOut> = client
+        .query(
+            "select data, coalesce(to_char(timestamp, 'YYYY-MM-DD HH24:MI:SS'), '') as timestamp, type from sensordata where plant = $1 order by timestamp desc",
+            &[&plant],
+        )
         .await
         .unwrap()
         .iter()
-        .map(|row| AvgEntry::from(row))
+        .map(|row| SensorDataOut::from(row))
         .collect();
     Ok(with_status(json(&rows), StatusCode::OK))
 }

@@ -2,6 +2,7 @@ extern crate dotenv;
 
 use log::error;
 use pretty_env_logger;
+use std::collections::HashMap;
 use std::env;
 use std::net::SocketAddr;
 use warp::http::header::{HeaderMap, HeaderValue};
@@ -59,6 +60,7 @@ async fn main() {
         .and_then(plants::list_plants);
     let list_data = warp::get()
         .and(warp::path("data"))
+        .and(warp::query::<HashMap<String, String>>())
         .and_then(sensordata::list_data);
     let health = warp::get().and(warp::path("health")).map(|| "Healthy");
     let unauthorized = health

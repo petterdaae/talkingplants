@@ -28,9 +28,16 @@ pub async fn db_connect() -> Client {
     client
 }
 
-pub fn ok(message: &str, status: StatusCode) -> impl warp::Reply {
+pub fn ok(message: &str, status: StatusCode) -> warp::reply::WithStatus<warp::reply::Json> {
     let response = JsonMessage {
         message: String::from(message),
     };
     with_status(json(&response), status)
+}
+
+pub fn bad_request(message: &str) -> warp::reply::WithStatus<warp::reply::Json> {
+    let response = JsonMessage {
+        message: String::from(message),
+    };
+    with_status(json(&response), StatusCode::BAD_REQUEST)
 }

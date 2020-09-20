@@ -37,6 +37,7 @@ void loop() {
   // Measure the moist
   keepAlive();
   int moist = meassureMoist();
+  keepAlive();
   Serial.print("Measured moist: ");
   Serial.println(moist);
   sendMoistureData(moist);
@@ -70,11 +71,15 @@ void sendMoistureData(int moisture) {
 
 int meassureMoist() {
   digitalWrite(MOIST_SWITCH, HIGH);
-  int samples = 30;
+  // Wait for sensor to stabalize??
+  delay(5000);
+  int samples = 300;
   int total = 0;
   for (int i = 0; i < samples; i++) {
-    total += analogRead(MOIST_IN);
-    delay(100);
+    int current = analogRead(MOIST_IN);
+    total += current;
+    Serial.println(current);
+    delay(50);
   }
   int average = total / samples;
   digitalWrite(MOIST_SWITCH, LOW);
