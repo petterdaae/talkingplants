@@ -13,7 +13,7 @@ const StyledHeader = styled.h2`
 function Plant({ id }) {
     const [data, setData] = useState([]);
     useEffect(() => {
-        fetch(`http://localhost:8080/data?plant=${id}`).then(data => data.json()).then(json => setData(json));
+        fetch(`${process.env.REACT_APP_API_URL}/data?plant=${id}`).then(data => data.json()).then(json => setData(json));
     }, [id]);
     return (
         <Wrapper>
