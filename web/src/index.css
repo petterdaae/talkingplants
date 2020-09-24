@@ -5,4 +5,5 @@ body {
   background-color: #F5F5DC;
   font-family: "Courier New";
   color: #696969;
+  overflow-y: scroll;
 }

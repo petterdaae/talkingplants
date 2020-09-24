@@ -14,24 +14,30 @@ const StyledTd = styled.td`
     border: 1px solid #a1a1a1;
 `;
 
+const Wrapper = styled.div`
+    display: inline-block;
+`;
+
 function Data({ data }) {
     return (
-        <StyledTable>
-            <thead>
-                <tr>
-                    <th>Timestamp</th>
-                    <th>Data</th>
-                </tr>
-            </thead>
-            <tbody>
-                {data.map(entry =>
-                    <tr key={entry.timestamp}>
-                        <StyledTd>{entry.timestamp}</StyledTd>
-                        <StyledTd>{entry.data}</StyledTd>
-                    </tr>)
-                }
-            </tbody>
-        </StyledTable>
+        <Wrapper>
+            <StyledTable>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.map(entry =>
+                        <tr key={entry.timestamp}>
+                            <StyledTd>{entry.timestamp}</StyledTd>
+                            <StyledTd>{entry.data}</StyledTd>
+                        </tr>)
+                    }
+                </tbody>
+            </StyledTable>
+        </Wrapper>
     );
 }
 

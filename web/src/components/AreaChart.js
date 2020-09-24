@@ -5,8 +5,7 @@ import { AxisLeft, AxisBottom } from '@visx/axis';
 import { LinearGradient } from '@visx/gradient';
 import { curveMonotoneX } from '@visx/curve';
 
-// Initialize some variables
-const axisColor = '#fff';
+const axisColor = '#696969';
 const axisBottomTickLabelProps = {
     textAnchor: 'middle',
     fontFamily: 'Arial',
@@ -22,7 +21,6 @@ const axisLeftTickLabelProps = {
     fill: axisColor,
 };
 
-// accessors
 const getDate = d => new Date(d.timestamp);
 const getStockValue = d => d.data;
 
@@ -48,7 +46,7 @@ export default function AreaChart({
                 from={gradientColor}
                 fromOpacity={1}
                 to={gradientColor}
-                toOpacity={0.2}
+                toOpacity={1}
             />
             <AreaClosed
                 data={data}
