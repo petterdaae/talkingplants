@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { scaleTime, scaleLinear } from '@visx/scale';
-import appleStock, { AppleStock } from '@visx/mock-data/lib/mocks/appleStock';
+import appleStock from '@visx/mock-data/lib/mocks/appleStock';
 import { Brush } from '@visx/brush';
-import { Bounds } from '@visx/brush/lib/types';
 import { PatternLines } from '@visx/pattern';
 import { LinearGradient } from '@visx/gradient';
 import { max, extent } from 'd3-array';
@@ -25,8 +24,8 @@ const selectedBrushStyle = {
 };
 
 // accessors
-const getDate = (d) => new Date(d.date);
-const getStockValue = (d) => d.close;
+const getDate = (d) => new Date(d.timestamp);
+const getStockValue = (d) => d.data;
 
 function BrushChart({
     compact = false,
@@ -38,7 +37,9 @@ function BrushChart({
         bottom: 20,
         right: 20,
     },
+    data
 }) {
+    const stock = data;
     const [filteredStock, setFilteredStock] = useState(stock);
 
     const onBrushChange = (domain) => {
@@ -50,6 +51,7 @@ function BrushChart({
             return x > x0 && x < x1 && y > y0 && y < y1;
         });
         setFilteredStock(stockCopy);
+        console.log(stockCopy);
     };
 
     const innerHeight = height - margin.top - margin.bottom;
@@ -101,8 +103,8 @@ function BrushChart({
 
     const initialBrushPosition = useMemo(
         () => ({
-            start: { x: brushDateScale(getDate(stock[50])) },
-            end: { x: brushDateScale(getDate(stock[100])) },
+            start: { x: brushDateScale(getDate(stock[0])) },
+            end: { x: brushDateScale(getDate(stock[stock.length - 1])) },
         }),
         [brushDateScale],
     );

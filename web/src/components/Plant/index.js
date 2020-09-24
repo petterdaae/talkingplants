@@ -15,15 +15,17 @@ const StyledHeader = styled.h2`
 function Plant({ id }) {
     const [data, setData] = useState([]);
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/data?plant=${id}`).then(data => data.json()).then(json => setData(json));
+        fetch(`${process.env.REACT_APP_API_URL}/data?plant=${id}`).then(data => data.json()).then(json => {
+            console.log(json);
+            setData(json)
+        });
     }, [id]);
-    const lineChartData = [{ id: 'moisture', data: data.map((entry => ({ x: entry.timestamp.substring(0, 10), y: entry.data }))) }];
     return (
         <Wrapper>
             <RoundedImage name="begonia.jpg" size="250px"></RoundedImage>
             <StyledHeader>Begonia Maculata</StyledHeader>
-            <BrushChart width={500} height={500}></BrushChart>
-            <Data data={data}></Data>
+            {data.length > 0 ? <BrushChart width={1300} height={600} data={data}></BrushChart> : null}
+            {/*<Data data={data}></Data>*/}
         </Wrapper>
     );
 }

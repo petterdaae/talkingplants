@@ -1,7 +1,7 @@
 import React from 'react';
 import { Group } from '@visx/group';
 import { AreaClosed } from '@visx/shape';
-import { AxisLeft, AxisBottom, AxisScale } from '@visx/axis';
+import { AxisLeft, AxisBottom } from '@visx/axis';
 import { LinearGradient } from '@visx/gradient';
 import { curveMonotoneX } from '@visx/curve';
 
@@ -23,8 +23,8 @@ const axisLeftTickLabelProps = {
 };
 
 // accessors
-const getDate = d => new Date(d.date);
-const getStockValue = d => d.close;
+const getDate = d => new Date(d.timestamp);
+const getStockValue = d => d.data;
 
 export default function AreaChart({
     data,
