@@ -15,9 +15,11 @@ const BrushWrapper = styled.div`
 
 function Plant({ id, image, name }) {
     const [data, setData] = useState([]);
+    const [firstFetchFinished, setFirstFetchFinished] = useState(false);
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/data?plant=${id}`).then(data => data.json()).then(json => {
             setData(json)
+            setFirstFetchFinished(true);
         });
     }, [id]);
     return (
@@ -34,7 +36,7 @@ function Plant({ id, image, name }) {
                     }
                     <Data data={data}></Data>
                 </>
-            ) : null}
+            ) : firstFetchFinished ? <p>This plant has not told me anything yet <span role="img" aria-label="sad face">😔</span></p> : null}
         </Wrapper>
     );
 }
