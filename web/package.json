@@ -10,10 +10,21 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@visx/axis": "^1.0.0",
+    "@visx/brush": "^1.0.0",
+    "@visx/curve": "^1.0.0",
+    "@visx/gradient": "^1.0.0",
+    "@visx/group": "^1.0.0",
+    "@visx/mock-data": "^1.0.0",
+    "@visx/pattern": "^1.0.0",
+    "@visx/responsive": "^1.0.0",
+    "@visx/scale": "^1.0.0",
+    "@visx/shape": "^1.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.2"
+    "react-scripts": "3.4.2",
+    "recharts": "^1.8.5"
   },
   "scripts": {
     "start": "react-scripts start",
