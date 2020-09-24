@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import { Link } from "react-router-dom";
 
 const MenuWrapper = styled.div`
-    padding-top: 100px;
     text-align: center;
     margin-left: 500px;
     margin-right: 500px;
