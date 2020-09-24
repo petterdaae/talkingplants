@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 const StyledImage = styled.img`
     border-radius: 50%;
     padding: 8px;
-    cursor: pointer;
 `;
 
 function RoundedImage({ size, name }) {

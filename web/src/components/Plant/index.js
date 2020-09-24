@@ -13,7 +13,7 @@ const BrushWrapper = styled.div`
     user-select: none;
 `;
 
-function Plant({ id }) {
+function Plant({ id, image, name }) {
     const [data, setData] = useState([]);
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/data?plant=${id}`).then(data => data.json()).then(json => {
@@ -22,8 +22,8 @@ function Plant({ id }) {
     }, [id]);
     return (
         <Wrapper>
-            <RoundedImage name="begonia.jpg" size="250px"></RoundedImage>
-            <h2>Begonia Maculata</h2>
+            <RoundedImage name={image} size="250px"></RoundedImage>
+            <h2>{name}</h2>
             {data.length > 0 ? (
                 <>
                     { document.body.clientWidth > 1600

@@ -1,10 +1,7 @@
 import React from "react";
 import RoundedImage from "./RoundedImage";
 import styled from '@emotion/styled'
-
-const Header = styled.h1`
-    text-align: center;
-`;
+import { Link } from "react-router-dom";
 
 const MenuWrapper = styled.div`
     padding-top: 100px;
@@ -17,13 +14,23 @@ const MenuWrapper = styled.div`
     }
 `;
 
+const StyledLink = styled(Link)`
+    cursor: pointer;
+`;
+
 function Home() {
     return <div>
-        <Header><span role="img" aria-label="plant emoji">🌱</span> Talking Plants</Header>
         <MenuWrapper>
-            <RoundedImage name="begonia.jpg" size="250px"></RoundedImage>
-            <div></div>
-            <RoundedImage name="paraply.jpg" size="250px"></RoundedImage>
+            <StyledLink
+                to={{ pathname: "/plant/10" }}
+            >
+                <RoundedImage name="begonia.jpg" size="250px"></RoundedImage>
+            </StyledLink>
+            <StyledLink
+                to={{ pathname: "/plant/11" }}
+            >
+                <RoundedImage name="paraply.jpg" size="250px"></RoundedImage>
+            </StyledLink>
         </MenuWrapper>
     </div >;
 }
