@@ -3,20 +3,15 @@ import React from "react";
 
 const StyledTable = styled.table`
     border-collapse: collapse;
+    table-layout: fixed;
+    width: 600px;
+    @media (max-width: 900px) {
+        width: calc(100vw - 16px);
+    }
 `;
 
 const StyledTd = styled.td`
     border: 1px solid #a1a1a1;
-    padding: 8px;
-    padding-left: 64px;
-    padding-right: 64px;
-`;
-
-const StyledTh = styled.th`
-    text-align: left;
-    padding: 8px;
-    padding-left: 64px;
-    padding-right: 64px;
 `;
 
 function Data({ data }) {
@@ -24,8 +19,8 @@ function Data({ data }) {
         <StyledTable>
             <thead>
                 <tr>
-                    <StyledTh>Timestamp</StyledTh>
-                    <StyledTh>Data</StyledTh>
+                    <th>Timestamp</th>
+                    <th>Data</th>
                 </tr>
             </thead>
             <tbody>
