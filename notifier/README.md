@@ -1,19 +1,14 @@
 # Notifier
 
-## Setting up an email address to send emails from
-* *This was tricky*
+## Setup
+* Create your own firebase project
+* Upgrade to blaze plan
+* Set default GCP resource location (in project settings)
 * Create a new gmail account
 * Enable two factor authentication
-* Generate an app password
-* Put your credentials in a file similar to `.env.example`
-
-## Development Setup
+* Create an app password
+* Add correct config values to `.env` (similar to `.env.example`)
 - `sudo npm i -g firebase-tools`
 - `firebase login`
-- Create your own firebase project
-- It should be on blaze plan
-- TODO: Document how to create .firebaserc
-- `firebase emulators:start --only functions`
-
-## Deploying
-- `firebase deploy --only functions`
+- `firebase emulators:start --only functions` (to test the functions locally)
+- `firebase deploy --only functions` (to deploy the functions to your firebase project)
