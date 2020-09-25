@@ -21,7 +21,7 @@ const axisLeftTickLabelProps = {
     fill: axisColor,
 };
 
-const getDate = d => new Date(d.timestamp);
+const getDate = d => new Date(d.timestamp + " UTC");
 const getStockValue = d => d.data;
 
 export default function AreaChart({

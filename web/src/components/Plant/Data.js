@@ -18,6 +18,23 @@ const Wrapper = styled.div`
     display: inline-block;
 `;
 
+function formatTimestamp(timestamp) {
+    let date = new Date(timestamp + " UTC");
+    let day = pad(date.getDate(), 2);
+    let month = pad(date.getMonth(), 2);
+    let hour = pad(date.getHours(), 2);
+    let seconds = pad(date.getSeconds(), 2);
+    return `${day}/${month} ${hour}:${seconds}`;
+}
+
+function pad(str, length) {
+    let result = "" + str;
+    while (result.length < length) {
+        result = "0" + result;
+    }
+    return result;
+}
+
 function Data({ data }) {
     return (
         <Wrapper>
@@ -31,7 +48,7 @@ function Data({ data }) {
                 <tbody>
                     {data.map(entry =>
                         <tr key={entry.timestamp}>
-                            <StyledTd>{entry.timestamp}</StyledTd>
+                            <StyledTd>{formatTimestamp(entry.timestamp)}</StyledTd>
                             <StyledTd>{entry.data}</StyledTd>
                         </tr>)
                     }
