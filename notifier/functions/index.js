@@ -25,13 +25,12 @@ function sendEmail(options, callback) {
     transporter.sendMail(options, callback);
 }
 
-exports.sendEmail = functions.https.onRequest((_, response) => {
+exports.outOfPowerNotfier = functions.pubsub.schedule('every 15 minutes').onRun(context => {
     sendEmail(LOW_BATTERY_MAIL_OPTIONS, (err, _) => {
         if (err) {
-            response.send(err.toString());
+            console.error(err.toString());
         } else {
-            response.send('Success');
+            console.log('Success');
         }
-
     });
 });

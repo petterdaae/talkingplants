@@ -11,6 +11,7 @@
 - `sudo npm i -g firebase-tools`
 - `firebase login`
 - Create your own firebase project
+- It should be on blaze plan
 - TODO: Document how to create .firebaserc
 - `firebase emulators:start --only functions`
 
