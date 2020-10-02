@@ -7,7 +7,7 @@ const StyledImage = styled.img`
 `;
 
 function RoundedImage({ size, name }) {
-    return <StyledImage src={name} alt="plant" height={size} width={size}></StyledImage>
+    return <StyledImage src={name} alt="plant" height={size} width={size}></StyledImage>;
 }
 
 export default RoundedImage;

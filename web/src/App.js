@@ -26,6 +26,7 @@ const StyledLink = styled(Link)`
     cursor: pointer;
     text-decoration: none;
     color: inherit;
+    text-decoration: none;
 `;
 
 function App() {
