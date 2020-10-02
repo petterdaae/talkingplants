@@ -3,9 +3,10 @@
 #include "config.h"
 
 // Constants
-const int MOIST_IN = A1;
-const int MOIST_SWITCH = 1;
-const int KEEP_ALIVE_SWITCH = 2;
+const int MOIST_IN = A4;
+const int MOIST_SWITCH = 6;
+const int KEEP_ALIVE_SWITCH = 7;
+const int RESET_SWITCH = 10;
 
 // Global
 int status = WL_IDLE_STATUS;
@@ -16,6 +17,8 @@ void setup() {
   Serial.begin(9600);
   delay(2000);
 
+  Serial.println("Starting ...");
+
   // Setup output pins
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(MOIST_SWITCH, OUTPUT);
@@ -23,7 +26,9 @@ void setup() {
   digitalWrite(LED_BUILTIN, LOW);
   digitalWrite(MOIST_SWITCH, LOW);
   digitalWrite(KEEP_ALIVE_SWITCH, LOW);
+}
 
+void connectToWifi() {
   // Connect to WiFi
   while (status != WL_CONNECTED) {
     Serial.print("Attempting to connect to wifi: ");
@@ -34,19 +39,35 @@ void setup() {
 }
 
 void loop() {
-  // Measure the moist
-  keepAlive();
-  int moist = meassureMoist();
-  keepAlive();
-  Serial.print("Measured moist: ");
-  Serial.println(moist);
-  sendMoistureData(moist);
-
-  // Sleep for 60 minutes ish and keep the power bank alive
+  Serial.println("Going into sleep");
+  // Sleep for approximately 1 hour and keep the power bank alive
   for (int i = 0; i < 120; i++) {
     keepAlive();
     delay(30000);
   }
+
+  Serial.println("Waking up");
+  
+  keepAlive();
+  int moist = meassureMoist();
+  Serial.print("Meassured moist: ");
+  Serial.println(moist);
+
+  keepAlive();
+  connectToWifi();
+  
+  keepAlive();
+  sendMoistureData(moist);
+
+  Serial.println("Restting ...");
+  delay(1000);
+  reset();
+}
+
+void reset() {
+  digitalWrite(RESET_SWITCH, HIGH);
+  pinMode(RESET_SWITCH, OUTPUT);
+  digitalWrite(RESET_SWITCH, LOW);
 }
 
 void sendMoistureData(int moisture) {
