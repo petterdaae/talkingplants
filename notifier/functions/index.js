@@ -36,25 +36,33 @@ exports.outOfPowerNotfier = functions.pubsub.schedule('every 70 minutes').onRun(
         ssl: true
     });
     await client.connect();
-    const response = await client.query("SELECT timestamp FROM sensordata WHERE plant=10 ORDER BY timestamp desc");
-    let timestamp = new Date(response.rows[0].timestamp)
-    let now = new Date();
-    let diff = now - timestamp;
-    console.log(diff);
 
-    const MINUTE = 60 * 1000;
-    const PADDING = 10 * MINUTE;
+    const plants = await client.query("SELECT id FROM plant")
 
-    if (diff > 70 * MINUTE && diff < 2 * 70 * MINUTE + PADDING) {
-        sendEmail(LOW_BATTERY_MAIL_OPTIONS, (err, _) => {
-            if (err) {
-                console.error(err.toString());
-            } else {
-                console.log('Success');
-            }
-        });
+    for (let plant of plants) {
+        let id = plant.id;
+
+        const response = await client.query(
+            "SELECT timestamp FROM sensordata WHERE plant=$1 ORDER BY timestamp desc", [id]
+        );
+        let timestamp = new Date(response.rows[0].timestamp)
+        let now = new Date();
+        let diff = now - timestamp;
+        console.log(diff);
+
+        const MINUTE = 60 * 1000;
+        const PADDING = 10 * MINUTE;
+
+        if (diff > 70 * MINUTE && diff < 2 * 70 * MINUTE + PADDING) {
+            sendEmail(LOW_BATTERY_MAIL_OPTIONS, (err, _) => {
+                if (err) {
+                    console.error(err.toString());
+                } else {
+                    console.log('Success');
+                }
+            });
+        }
     }
-
     await client.end();
     return null;
 });
