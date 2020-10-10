@@ -1,3 +1,7 @@
+🚧 *WORK IN PROGRESS* 🚧
+
+---
+
 # 🌱 Talking Plants
 Notifies you when your plants need your attention. 
 
@@ -27,7 +31,7 @@ Follow this simple 12 step guide to get started! *I recommend hosting the databa
 11. Create `notifier/functions/.env`, similar to `notifier/functions/.env.example`.
 12. Go into `notifier/` (which is the firebase project root) and deploy to your own firebase instance.
 
-## 🚀 Deployment (these are my personal notes and may not apply to your hosting choices)
+## 🚀 Deployment (may not apply to your hosting choices)
 ### Rest API
 * https://elements.heroku.com/buildpacks/sectorlabs/heroku-buildpack-subdir
 * https://github.com/emk/heroku-buildpack-rust
