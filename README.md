@@ -1,8 +1,10 @@
 # 🌱 Talking Plants
-Notifies you when your plants need your attention. You can check out the unauthenticated parts of the application at [talkingplants.daae.dev](https://talkingplants.daae.dev).
+Notifies you when your plants need your attention. 
+
+Check out the web demo: [talkingplants.daae.dev](https://talkingplants.daae.dev).
 
 ## 🛠️ Installation / Development Setup
-Follow this simple 12 step guide to get started! *I recommend hosting the database and rest api on Heroku and the react app on netlify (because most this repo contains a lot of the necessary configuration for these).*
+Follow this simple 12 step guide to get started! *I recommend hosting the database and rest api on Heroku and the react app on netlify (because this repo contains a lot of the necessary configuration for these).*
 
 1. `sql/`: Setup a postgres database and run the sql scripts.
 2. `api/`: Find a nice place to host the rest api.
