@@ -13,3 +13,9 @@ create table sensordata (
     plant int not null,
     foreign key (plant) references plant (id)
 );
+
+create table notifications (
+    id serial primary key,
+    type varchar(255) not null,
+    timestamp timestamp not null default current_timestamp
+);

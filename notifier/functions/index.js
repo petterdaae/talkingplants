@@ -5,6 +5,10 @@ const pg = require('pg');
 
 dotenv.config();
 
+const MINUTE = 60 * 1000;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
+
 const LOW_BATTERY_MAIL_OPTIONS = {
     from: `Talking Plants <${process.env.FROM_EMAIL}>`,
     to: process.env.TO_EMAIL,
@@ -33,7 +37,11 @@ function sendEmail(options, callback) {
     transporter.sendMail(options, callback);
 }
 
-exports.outOfPowerNotfier = functions.pubsub.schedule('every 70 minutes').onRun(async context => {
+async function registerNotification(client, type) {
+    await client.query("INSERT INTO notifications (type) VALUES ($1)", [type]);
+}
+
+exports.outOfPowerNotfier = functions.region("europe-west1").pubsub.schedule('every 70 minutes').onRun(async context => {
     const client = new pg.Client({
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
@@ -46,26 +54,34 @@ exports.outOfPowerNotfier = functions.pubsub.schedule('every 70 minutes').onRun(
 
     const plants = await client.query("SELECT id FROM plant")
 
-    for (let plant of plants) {
+    for (let plant of plants.rows) {
         let id = plant.id;
 
         const response = await client.query(
-            "SELECT timestamp FROM sensordata WHERE plant=$1 ORDER BY timestamp desc", [id]
+            "SELECT timestamp FROM sensordata WHERE plant=$1 ORDER BY timestamp desc LIMIT 1", [id]
         );
+
+        if (
+            !response.rows ||
+            response.rows.length !== 1
+        ) {
+            console.log(`Plant (id=${id}) is not setup or has not received any data yet`);
+            continue;
+        }
+
         let timestamp = new Date(response.rows[0].timestamp)
         let now = new Date();
         let diff = now - timestamp;
-        console.log(diff);
 
-        const MINUTE = 60 * 1000;
         const PADDING = 3 * MINUTE;
 
         if (diff > 70 * MINUTE && diff < 2 * 70 * MINUTE + PADDING) {
+            registerNotification(client, "lowpower:" + id)
             sendEmail(LOW_BATTERY_MAIL_OPTIONS, (err, _) => {
                 if (err) {
                     console.error(err.toString());
                 } else {
-                    console.log('Successfully sent out of power mail.');
+                    console.log('Successfully sent out of power mail');
                 }
             });
         }
@@ -74,7 +90,7 @@ exports.outOfPowerNotfier = functions.pubsub.schedule('every 70 minutes').onRun(
     return null;
 });
 
-exports.lowMoistureNotifier = functions.pubsub.schedule("every 70 minutes").onRun(async context => {
+exports.lowMoistureNotifier = functions.region("europe-west1").pubsub.schedule("every 60 minutes").onRun(async context => {
     const client = new pg.Client({
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
@@ -87,34 +103,52 @@ exports.lowMoistureNotifier = functions.pubsub.schedule("every 70 minutes").onRu
 
     const plants = await client.query("SELECT name, id FROM plant")
 
-    for (let plant of plants) {
+    for (let plant of plants.rows) {
         let id = plant.id;
         let name = plant.name;
 
-        let response = await client.query(
-            "SELECT data FROM sensordata WHERE plant=$1 ORDER BY timestamp desc LIMIT 100", [id]
+        let moisture = await client.query(
+            "SELECT data FROM sensordata WHERE plant=$1 ORDER BY timestamp desc LIMIT 1", [id]
         );
 
-        let moisture = response.rows.map(row => row.data);
+        let notifications = await client.query(
+            "SELECT timestamp FROM notifications WHERE type=$1 ORDER BY timestamp DESC LIMIT 1",
+            ["lowmoisture:" + id]
+        );
 
-        const LIMIT = 900;
+        if (
+            !moisture.rows ||
+            moisture.rows.length !== 1
+        ) {
+            console.log(`Plant (id=${id}) is not setup or has not received any data yet`);
+            continue;
+        }
 
-        let count = 0;
+        if (notifications.rows && notifications.rows.length === 1) {
+            let mostRecentNotification = new Date(notifications.rows[0].timestamp);
 
-        for (let data of moisture) {
-            if (data > LIMIT) {
-                count++;
+            let now = new Date();
+            let diff = now - mostRecentNotification;
+
+            if (diff < 2 * DAY) {
+                console.log(`Skipping notification for plant (${id}) because of recent notification`);
+                continue;
             }
         }
 
-        if (count === 7) {
+        let mostRecentMoisture = moisture.rows[0].data;
+
+        if (mostRecentMoisture < 900) {
+            await registerNotification(client, "lowmoisture:" + id);
             sendEmail(LOW_MOISTURE_MAIL_OPTIONS(name), (err, _) => {
                 if (err) {
                     console.error(err.toString());
                 } else {
-                    console.log('Successfully sent low moisture mail.');
+                    console.log('Successfully sent low moisture mail');
                 }
             });
+        } else {
+            console.log(`Not sending moisture notification because moisture level is ok (moisture=${mostRecentMoisture})`);
         }
     }
     await client.end();
