@@ -138,7 +138,7 @@ exports.lowMoistureNotifier = functions.region("europe-west1").pubsub.schedule("
 
         let mostRecentMoisture = moisture.rows[0].data;
 
-        if (mostRecentMoisture < 900) {
+        if (mostRecentMoisture < 500) {
             await registerNotification(client, "lowmoisture:" + id);
             sendEmail(LOW_MOISTURE_MAIL_OPTIONS(name), (err, _) => {
                 if (err) {

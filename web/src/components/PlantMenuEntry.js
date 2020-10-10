@@ -44,11 +44,11 @@ function Info({ }) {
             <tbody>
                 <tr>
                     <TdKey>💧 Moisture:</TdKey>
-                    <TdVal>80%</TdVal>
+                    <TdVal>TBA</TdVal>
                 </tr>
                 <tr>
                     <TdKey>⏰ Last meassure:</TdKey>
-                    <TdVal>25.09 10:23</TdVal>
+                    <TdVal>TBA</TdVal>
                 </tr>
             </tbody>
         </table>
