@@ -31,6 +31,9 @@ Follow this simple 12 step guide to get started! *I recommend hosting the databa
 
 ## 🚀 Deployment (may not apply to your hosting choices)
 ### Rest API
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/02c0eaf5-91c5-4218-8146-c5b2c9b1ee52/deploy-status)](https://app.netlify.com/sites/confident-newton-786803/deploys)
+
 * https://elements.heroku.com/buildpacks/sectorlabs/heroku-buildpack-subdir
 * https://github.com/emk/heroku-buildpack-rust
 * Add required environment variables (specified in .env.example) in `Settings/Config Vars` in Heroku

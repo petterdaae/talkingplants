@@ -37,17 +37,17 @@ const TdVal = styled.td`
     font-style: italic;
 `;
 
-function Info({ }) {
+function Info() {
     return <InfoWrapper>
         <h3>Begonia Maculata</h3>
         <table>
             <tbody>
                 <tr>
-                    <TdKey>💧 Moisture:</TdKey>
+                    <TdKey><span role="img" aria-label="drop-emoji">💧</span> Moisture:</TdKey>
                     <TdVal>TBA</TdVal>
                 </tr>
                 <tr>
-                    <TdKey>⏰ Last meassure:</TdKey>
+                    <TdKey><span role="img" aria-label="clock-emoji">⏰</span> Last meassure:</TdKey>
                     <TdVal>TBA</TdVal>
                 </tr>
             </tbody>

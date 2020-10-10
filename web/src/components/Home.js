@@ -1,5 +1,4 @@
 import React from "react";
-import RoundedImage from "./RoundedImage";
 import styled from '@emotion/styled'
 import { Link } from "react-router-dom";
 import PlantMenuEntry from "./PlantMenuEntry";
