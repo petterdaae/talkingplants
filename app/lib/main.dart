@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  firebaseMessaging.subscribeToTopic("main");
   firebaseMessaging.requestNotificationPermissions(
     const IosNotificationSettings(
         sound: true, badge: true, alert: true, provisional: false),

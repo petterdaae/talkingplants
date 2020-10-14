@@ -2,8 +2,10 @@ const dotenv = require('dotenv')
 const functions = require('firebase-functions');
 const nodemailer = require('nodemailer');
 const pg = require('pg');
+const admin = require('firebase-admin')
 
 dotenv.config();
+admin.initializeApp();
 
 const MINUTE = 60 * 1000;
 const HOUR = 60 * MINUTE;
@@ -16,11 +18,31 @@ const LOW_BATTERY_MAIL_OPTIONS = {
     text: "Your plant has not been talking for a while. It is probably out of power."
 };
 
+let LOW_BATTERY_NOTIFICATION_PAYLOAD = (name) => ({
+    notification: {
+        title: `${name} is out of power!`,
+        body: `${name} has not been tallking for a while. It is probably out of power.`,
+    },
+    data: {
+        "click_action": "FLUTTER_NOTIFICATION_CLICK"
+    }
+});
+
 let LOW_MOISTURE_MAIL_OPTIONS = (name) => ({
     from: `Talking Plants <${process.env.FROM_EMAIL}>`,
     to: process.env.TO_EMAIL,
     subject: `${name} is thirsty!`,
     text: `${name} needs water soon or it will die.`
+});
+
+let LOW_MOISTURE_NOTIFICATION_PAYLOAD = (name) => ({
+    notification: {
+        title: `${name} is thirsty!`,
+        body: `${name} needs water soon or it will die.`,
+    },
+    data: {
+        "click_action": "FLUTTER_NOTIFICATION_CLICK"
+    }
 });
 
 function sendEmail(options, callback) {
@@ -37,11 +59,23 @@ function sendEmail(options, callback) {
     transporter.sendMail(options, callback);
 }
 
+async function sendNotification(payload) {
+    let response = await admin.messaging().sendToTopic(
+        "main",
+        payload
+    );
+    if (response.error) {
+        console.error(response.error);
+    } else {
+        console.log("successfully sent notification", response);
+    }
+}
+
 async function registerNotification(client, type) {
     await client.query("INSERT INTO notifications (type) VALUES ($1)", [type]);
 }
 
-exports.outOfPowerNotfier = functions.region("europe-west1").pubsub.schedule('every 70 minutes').onRun(async context => {
+exports.outOfPowerNotfier = functions.region("europe-west1").pubsub.schedule('every 60 minutes').onRun(async context => {
     const client = new pg.Client({
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
@@ -52,10 +86,11 @@ exports.outOfPowerNotfier = functions.region("europe-west1").pubsub.schedule('ev
     });
     await client.connect();
 
-    const plants = await client.query("SELECT id FROM plant")
+    const plants = await client.query("SELECT id, name FROM plant")
 
     for (let plant of plants.rows) {
         let id = plant.id;
+        let name = plant.name;
 
         const response = await client.query(
             "SELECT timestamp FROM sensordata WHERE plant=$1 ORDER BY timestamp desc LIMIT 1", [id]
@@ -77,6 +112,7 @@ exports.outOfPowerNotfier = functions.region("europe-west1").pubsub.schedule('ev
 
         if (diff > 70 * MINUTE && diff < 2 * 70 * MINUTE + PADDING) {
             registerNotification(client, "lowpower:" + id)
+            sendNotification(LOW_BATTERY_NOTIFICATION_PAYLOAD(name))
             sendEmail(LOW_BATTERY_MAIL_OPTIONS, (err, _) => {
                 if (err) {
                     console.error(err.toString());
@@ -138,8 +174,9 @@ exports.lowMoistureNotifier = functions.region("europe-west1").pubsub.schedule("
 
         let mostRecentMoisture = moisture.rows[0].data;
 
-        if (mostRecentMoisture < 500) {
+        if (mostRecentMoisture < 750) {
             await registerNotification(client, "lowmoisture:" + id);
+            sendNotification(LOW_MOISTURE_NOTIFICATION_PAYLOAD(name));
             sendEmail(LOW_MOISTURE_MAIL_OPTIONS(name), (err, _) => {
                 if (err) {
                     console.error(err.toString());
