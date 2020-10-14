@@ -23,64 +23,23 @@ void main() {
       // _navigateToItemDetail(message);
     },
   );
-  runApp(MyApp());
+  runApp(App());
 }
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+      home: Container(
+        decoration:
+            new BoxDecoration(color: Color.fromARGB(255, 245, 245, 220)),
+        child: Center(
+          child: Image.asset(
+            "assets/seeding.png",
+            width: 75.0,
+            height: 75.0,
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ),
     );
   }
@@ -91,11 +50,9 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
     // Handle data message
     final dynamic data = message['data'];
   }
-
   if (message.containsKey('notification')) {
     // Handle notification message
     final dynamic notification = message['notification'];
   }
-
   // Or do other work.
 }
