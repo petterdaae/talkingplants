@@ -6,7 +6,7 @@ Notifies you when your plants need your attention.
 Check out the web demo: [talkingplants.daae.dev](https://talkingplants.daae.dev).
 
 ## 🛠️ Installation / Development Setup
-Follow this simple 12 step guide to get started! *I recommend hosting the database and rest api on Heroku and the react app on netlify (because this repo contains a lot of the necessary configuration for these).*
+Follow this simple 12 step guide to get started! *I recommend hosting the database and rest api on Heroku and the react app on netlify (because this repo contains a lot of the necessary configuration for these).* App sepecific instructions are intended for android, iOS has not been tested yet.
 
 1. `sql/`: Setup a postgres database and run the sql scripts.
 2. `api/`: Find a nice place to host the rest api.
@@ -28,6 +28,7 @@ Follow this simple 12 step guide to get started! *I recommend hosting the databa
 10. Create a fresh gmail account, enable two factor authentication and create an app password for the account.
 11. Create `notifier/functions/.env`, similar to `notifier/functions/.env.example`.
 12. Go into `notifier/` (which is the firebase project root) and deploy to your own firebase instance.
+13. Configure the app to talk to your firebase project. There are plenty of resources on how to do this. Essentially what you have to do is to get the `google-services.json` file.
 
 ## 🚀 Deployment (may not apply to your hosting choices)
 ### Rest API
