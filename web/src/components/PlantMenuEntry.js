@@ -22,7 +22,7 @@ function PlantMenuEntry({ id }) {
     let src = id === 10 ? "begonia.jpg" : "paraply.jpg";
     return (
         <Wrapper>
-            {id === 11 ? <Info></Info> : null}
+            {id === 13 ? <Info></Info> : null}
             <StyledRoundedImage name={src} size="200px"></StyledRoundedImage>
             {id === 10 ? <Info></Info> : null}
         </Wrapper>

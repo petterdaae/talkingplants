@@ -23,7 +23,7 @@ function Home() {
                 <PlantMenuEntry id={10}></PlantMenuEntry>
             </StyledLink>
             <StyledLink
-                to={{ pathname: "/plant/11" }}
+                to={{ pathname: "/plant/13" }}
             >
                 <PlantMenuEntry id={11}></PlantMenuEntry>
             </StyledLink>

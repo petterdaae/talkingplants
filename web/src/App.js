@@ -47,9 +47,9 @@ function App() {
           <Plant id={10} name="Begonia Maculata" image="/begonia.jpg"></Plant>
         </Center>
       </Route>
-      <Route exact path="/plant/11">
+      <Route exact path="/plant/13">
         <Center>
-          <Plant id={11} name="Schefflera" image="/paraply.jpg"></Plant>
+          <Plant id={13} name="Schefflera" image="/paraply.jpg"></Plant>
         </Center>
       </Route>
       <Route path="/">
