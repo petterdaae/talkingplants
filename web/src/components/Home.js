@@ -25,7 +25,7 @@ function Home() {
             <StyledLink
                 to={{ pathname: "/plant/13" }}
             >
-                <PlantMenuEntry id={11}></PlantMenuEntry>
+                <PlantMenuEntry id={13}></PlantMenuEntry>
             </StyledLink>
         </MenuWrapper>
     </div >;
