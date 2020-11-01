@@ -19,7 +19,7 @@ exports.outOfPowerNotfier = functions.region("europe-west1").pubsub.schedule('ev
     });
     await client.connect();
 
-    const plants = await client.query("SELECT id, name FROM plant")
+    const plants = await client.query("SELECT id, name FROM plant WHERE enabled")
     for (let plant of plants.rows) {
         let notifications = await client.query(
             "SELECT timestamp FROM notifications WHERE type=$1 ORDER BY timestamp DESC LIMIT 1",
@@ -71,7 +71,7 @@ exports.lowMoistureNotifier = functions.region("europe-west1").pubsub.schedule("
     });
     await client.connect();
 
-    const plants = await client.query("SELECT name, id FROM plant")
+    const plants = await client.query("SELECT name, id, threshold FROM plant WHERE enabled")
     for (let plant of plants.rows) {
         let moisture = await client.query(
             "SELECT data FROM sensordata WHERE plant=$1 ORDER BY timestamp desc LIMIT 1", [plant.id]
@@ -99,7 +99,7 @@ exports.lowMoistureNotifier = functions.region("europe-west1").pubsub.schedule("
 
         let mostRecentMoisture = moisture.rows[0].data;
 
-        if (mostRecentMoisture < 750) {
+        if (mostRecentMoisture < plant.threshold) {
             await utils.registerNotification(client, "lowmoisture:" + plant.id);
             await utils.sendNotification(constants.LOW_MOISTURE_NOTIFICATION_PAYLOAD(plant.name));
         } else {
