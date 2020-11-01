@@ -40,11 +40,11 @@ function Info({ plant }) {
             <tbody>
                 <tr>
                     <td><span role="img" aria-label="drop-emoji">💧</span> Moisture:</td>
-                    <TdVal>TBA</TdVal>
+                    <TdVal>{plant.moisture}</TdVal>
                 </tr>
                 <tr>
                     <td><span role="img" aria-label="clock-emoji">⏰</span> Last meassure:</td>
-                    <TdVal>TBA</TdVal>
+                    <TdVal>{plant.last_meassure}</TdVal>
                 </tr>
             </tbody>
         </table>

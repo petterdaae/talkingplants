@@ -9,6 +9,7 @@ pub struct Plant {
     id: Option<i32>,
     name: String,
     moisture: Option<i32>,
+    last_meassure: Option<String>,
 }
 
 impl From<&Row> for Plant {
@@ -17,6 +18,7 @@ impl From<&Row> for Plant {
             id: row.get("id"),
             name: row.get("name"),
             moisture: row.get("moisture"),
+            last_meassure: row.get("last_meassure"),
         }
     }
 }
@@ -38,7 +40,8 @@ pub async fn list_plants() -> Result<impl warp::Reply, warp::Rejection> {
         select distinct on (plant.id)
             plant.id as id,
             plant.name as name,
-            sensordata.data as moisture
+            sensordata.data as moisture,
+            coalesce(to_char(sensordata.timestamp, 'YYYY-MM-DD HH24:MI:SS'), '') as last_meassure
         from
             plant
             inner join
