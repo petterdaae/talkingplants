@@ -13,19 +13,19 @@ const BrushWrapper = styled.div`
     user-select: none;
 `;
 
-function Plant({ id, image, name }) {
+function Plant({ plant }) {
     const [data, setData] = useState([]);
     const [firstFetchFinished, setFirstFetchFinished] = useState(false);
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/data?plant=${id}`).then(data => data.json()).then(json => {
+        fetch(`${process.env.REACT_APP_API_URL}/data?plant=${plant.id}`).then(data => data.json()).then(json => {
             setData(json)
             setFirstFetchFinished(true);
         });
-    }, [id]);
+    }, [plant.id]);
     return (
         <Wrapper>
-            <RoundedImage name={image} size="250px"></RoundedImage>
-            <h2>{name}</h2>
+            <RoundedImage name={`/${plant.id}.jpg`} size="250px"></RoundedImage>
+            <h2>{plant.name}</h2>
             {data.length > 0 ? (
                 <>
                     { document.body.clientWidth > 1600

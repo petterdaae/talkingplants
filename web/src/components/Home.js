@@ -14,19 +14,17 @@ const StyledLink = styled(Link)`
     color: inherit;
 `;
 
-function Home() {
+function Home({ plants }) {
     return <div>
         <MenuWrapper>
-            <StyledLink
-                to={{ pathname: "/plant/10" }}
-            >
-                <PlantMenuEntry id={10}></PlantMenuEntry>
-            </StyledLink>
-            <StyledLink
-                to={{ pathname: "/plant/13" }}
-            >
-                <PlantMenuEntry id={13}></PlantMenuEntry>
-            </StyledLink>
+            {plants.map(plant => (
+                <StyledLink
+                    to={{ pathname: `/plant/${plant.id}` }}
+                    key={plant.id}
+                >
+                    <PlantMenuEntry plant={plant}></PlantMenuEntry>
+                </StyledLink>
+            ))}
         </MenuWrapper>
     </div >;
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Home from './components/Home';
 import {
   BrowserRouter as Router,
@@ -30,6 +30,12 @@ const StyledLink = styled(Link)`
 `;
 
 function App() {
+  let [plants, setPlants] = useState([]);
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL}/plants`).then(data => data.json()).then(json => {
+      setPlants(json);
+    });
+  }, []);
   return (<Router>
     <Center>
       <StyledLink
@@ -39,18 +45,15 @@ function App() {
       </StyledLink>
     </Center>
     <Switch>
+      {plants.map(plant => (
+        <Route exact path={`/plant/${plant.id}`} key={plant.id}>
+          <Center>
+            <Plant plant={plant}></Plant>
+          </Center>
+        </Route>
+      ))}
       <Route exact path="/">
-        <Home></Home>
-      </Route>
-      <Route exact path="/plant/10">
-        <Center>
-          <Plant id={10} name="Begonia Maculata" image="/begonia.jpg"></Plant>
-        </Center>
-      </Route>
-      <Route exact path="/plant/13">
-        <Center>
-          <Plant id={13} name="Schefflera" image="/paraply.jpg"></Plant>
-        </Center>
+        <Home plants={plants}></Home>
       </Route>
       <Route path="/">
         <NotFound>Not found</NotFound>

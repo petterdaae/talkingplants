@@ -18,36 +18,32 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
-function PlantMenuEntry({ id }) {
-    let src = id === 10 ? "begonia.jpg" : "paraply.jpg";
+function PlantMenuEntry({ plant }) {
     return (
         <Wrapper>
-            {id === 13 ? <Info></Info> : null}
-            <StyledRoundedImage name={src} size="200px"></StyledRoundedImage>
-            {id === 10 ? <Info></Info> : null}
+            {plant.id % 2 === 0 ? <Info plant={plant}></Info> : null}
+            <StyledRoundedImage name={`/${plant.id}.jpg`} size="200px"></StyledRoundedImage>
+            {plant.id % 2 === 1 ? <Info plant={plant}></Info> : null}
         </Wrapper>
     );
 }
-
-const TdKey = styled.td`
-`;
 
 const TdVal = styled.td`
     text-align: right;
     font-style: italic;
 `;
 
-function Info() {
+function Info({ plant }) {
     return <InfoWrapper>
-        <h3>Begonia Maculata</h3>
+        <h3>{plant.name}</h3>
         <table>
             <tbody>
                 <tr>
-                    <TdKey><span role="img" aria-label="drop-emoji">💧</span> Moisture:</TdKey>
+                    <td><span role="img" aria-label="drop-emoji">💧</span> Moisture:</td>
                     <TdVal>TBA</TdVal>
                 </tr>
                 <tr>
-                    <TdKey><span role="img" aria-label="clock-emoji">⏰</span> Last meassure:</TdKey>
+                    <td><span role="img" aria-label="clock-emoji">⏰</span> Last meassure:</td>
                     <TdVal>TBA</TdVal>
                 </tr>
             </tbody>
