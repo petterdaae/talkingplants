@@ -8,6 +8,7 @@ use warp::reply::{json, with_status};
 pub struct Plant {
     id: Option<i32>,
     name: String,
+    moisture: Option<i32>,
 }
 
 impl From<&Row> for Plant {
@@ -15,6 +16,7 @@ impl From<&Row> for Plant {
         Self {
             id: row.get("id"),
             name: row.get("name"),
+            moisture: row.get("moisture"),
         }
     }
 }
@@ -31,7 +33,19 @@ pub async fn new_plant(plant: Plant) -> Result<impl warp::Reply, warp::Rejection
 pub async fn list_plants() -> Result<impl warp::Reply, warp::Rejection> {
     let client = common::db_connect().await;
     let rows: Vec<Plant> = client
-        .query("SELECT id, name FROM plant", &[])
+        .query(
+            "
+        select distinct on (plant.id)
+            plant.id as id,
+            plant.name as name,
+            sensordata.data as moisture
+        from
+            plant
+            inner join
+            sensordata on plant.id = sensordata.plant
+        order by plant.id, sensordata.timestamp desc",
+            &[],
+        )
         .await
         .unwrap()
         .iter()
