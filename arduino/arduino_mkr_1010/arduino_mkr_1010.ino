@@ -43,7 +43,7 @@ void loop() {
   // Sleep for approximately 1 hour and keep the power bank alive
   for (int i = 0; i < 120; i++) {
     keepAlive();
-    delay(30000);
+    delay(15000);
   }
 
   Serial.println("Waking up");
@@ -109,6 +109,6 @@ int meassureMoist() {
 
 void keepAlive() {
   digitalWrite(KEEP_ALIVE_SWITCH, HIGH);
-  delay(500);
+  delay(2000);
   digitalWrite(KEEP_ALIVE_SWITCH, LOW);
 }
