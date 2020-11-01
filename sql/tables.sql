@@ -3,7 +3,8 @@ create table plant (
     name varchar(255) not null
 );
 
-alter table plant add column image bytea;
+alter table plant add column threshold int;
+alter table plant add column enabled boolean;
 
 create table sensordata (
     id serial primary key,
