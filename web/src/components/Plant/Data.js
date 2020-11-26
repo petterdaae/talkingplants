@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 `;
 
 function formatTimestamp(timestamp) {
-    let date = new Date(timestamp + " UTC");
+    let date = new Date(timestamp + "Z");
     let day = pad(date.getDate(), 2);
     let month = pad(date.getMonth(), 2);
     let hour = pad(date.getHours(), 2);
