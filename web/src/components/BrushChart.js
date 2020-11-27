@@ -19,7 +19,7 @@ const selectedBrushStyle = {
     stroke: '#696969',
 };
 
-const getDate = (d) => new Date(d.timestamp + " UTC");
+const getDate = (d) => new Date(d.timestamp + "Z");
 const getDataValue = (d) => d.data;
 
 function BrushChart({
