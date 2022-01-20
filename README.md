@@ -1,7 +1,7 @@
-# 🌱 Talking Plants
+# Talking Plants
 Notifies you when your plants need your attention.
 
-## 🛠️ Installation / Development Setup
+## Installation / Development Setup
 Follow this simple 12 step guide to get started! *I recommend hosting the database and rest api on Heroku and the react app on netlify (because this repo contains a lot of the necessary configuration for these).* App sepecific instructions are intended for android, iOS has not been tested yet.
 
 1. `sql/`: Setup a postgres database and run the sql scripts.
