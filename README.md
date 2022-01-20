@@ -1,7 +1,5 @@
 # 🌱 Talking Plants
-Notifies you when your plants need your attention. 
-
-Check out the web demo: [talkingplants.daae.dev](https://talkingplants.daae.dev).
+Notifies you when your plants need your attention.
 
 ## 🛠️ Installation / Development Setup
 Follow this simple 12 step guide to get started! *I recommend hosting the database and rest api on Heroku and the react app on netlify (because this repo contains a lot of the necessary configuration for these).* App sepecific instructions are intended for android, iOS has not been tested yet.
@@ -26,28 +24,3 @@ Follow this simple 12 step guide to get started! *I recommend hosting the databa
 10. Create `notifier/functions/.env`, similar to `notifier/functions/.env.example`.
 11. Go into `notifier/` (which is the firebase project root) and deploy to your own firebase instance.
 12. Configure the app to talk to your firebase project. There are plenty of resources on how to do this. Essentially what you have to do is to get the `google-services.json` file.
-
-## 🚀 Deployment (may not apply to your hosting choices)
-### Rest API
-
-[![Netlify Status](https://api.netlify.com/api/v1/badges/02c0eaf5-91c5-4218-8146-c5b2c9b1ee52/deploy-status)](https://app.netlify.com/sites/confident-newton-786803/deploys)
-
-* https://elements.heroku.com/buildpacks/sectorlabs/heroku-buildpack-subdir
-* https://github.com/emk/heroku-buildpack-rust
-* Add required environment variables (specified in .env.example) in `Settings/Config Vars` in Heroku
-* `git push heroku master`
-
-### Web
-Deploys triggered in netlify on new commits to master.
-
-### Arduino
-Use the Arduino IDE.
-
-### Notfier
-`firebase deploy --only functions`
-
-## 😠 Troubleshooting
-### Arduino
-* Use `lsusb` to check if the arduino is actually connected to usb.
-* Press the reset button on the arduino to restart the sketch.
-* Doubletap the reset button if you are not able to upload new code.
