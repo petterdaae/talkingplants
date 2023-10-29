@@ -1,3 +1,7 @@
+*Not maintained*
+
+---
+
 # Talking Plants
 Notifies you when your plants need your attention.
 
