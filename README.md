@@ -1,4 +1,4 @@
-*Not maintained*
+*Not maintained.*
 
 ---
 
